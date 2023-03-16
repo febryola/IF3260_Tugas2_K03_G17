@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        var oldValueRotX = 0;
+        var oldValueRotY = 0;
+        var oldValueRotZ = 0;
+        var oldValueMove = 0;
+        var isShading = false;
+    </script>
+
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>Menu</h2>
+        <label>Pilih Objek</label>
+        <select id="objectlist" name="objectlist" onchange="resetValue()">
+                <option value="kubus">Kubus</option>
+                <option value="piramida">Piramida</option>
+                <option value="prisma">Prisma</option>
+        </select>
+        <h3>PROJECTION</h3>
+        <button id="button-proj" onclick="toOrtho()">Orthographic</button>
+        <button id="button-proj" onclick="toOblique()">Oblique</button>
+        <button id="button-proj" onclick="toPerspective()">Perspective</button>
+        <label>Rotate</label><br/>
+        <label>X&nbsp;</label><input type="range" id="rotateX" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('x', this.value)"><br/>
+        <label>Y&nbsp;</label><input type="range" id="rotateY" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('y', this.value)"><br/>
+        <label>Z&nbsp;</label><input type="range" id="rotateZ" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('z', this.value)"><br/>
+        <label>Scale</label><br/>
+        <input type="number" id="scale" name="scale" min="0.1" step="0.1">
+        <button id="button-scale" onmousedown="updateScale()">Scale</button><br/>
+        <label>Translate</label>
+        <br/>
+        <button id="button-translate" onmousedown="updateTranslate('x', -0.05)">←</button>
+        <button id="button-translate" onmousedown="updateTranslate('x', 0.05)">→</button>
+        <button id="button-translate" onmousedown="updateTranslate('y', 0.05)">↑</button>
+        <button id="button-translate" onmousedown="updateTranslate('y', -0.05)">↓</button>
+        <br/>
+        <button id="button-tools" onclick="reset()">Reset</button>
+        <br/>
+        <label><b>Camera</b></label><br/>
+        <label>Angle&nbsp;</label><input type="range" id="angle" name="camera" min="-360" max="360" step="1" oninput="updateMove()"><br/>
+        <label>Zoom&nbsp;</label>
+        <button id="button-zoom" onmousedown="updateZoom(1.1)">In</button>
+        <button id="button-zoom" onmousedown="updateZoom(0.9)">Out</button>
+        <br/>
+        <span class="switch-shader-title">Shading</span>
+        <div class="switch-shader-container">
+            <input type="checkbox" id="switch-shader" name="switch-shader" class="switch-shader">
+            <label for="switch-shader" class="switch-shader-label"></label>
+        </div>
+        <br/>
+        <br/>
+        <span class="switch-title">Mode Gelap</span>
+        <div class="switch-container">
+            <input type="checkbox" id="switch" name="switch" class="switch">
+            <label for="switch" class="switch-label"></label>
+        </div>
+    </div>
+    <div class="title">
+        3D WEBGL HOLLOW OBJECTS
+    </div>
+    <canvas id="glcanvas" width="pixel">
+            Your browser doesn't support the HTML5 canvas element
+        </canvas>
+    <div class="row">
+        <button class="button-file" id="button-help" onclick="help()">Help</button>
+        <button class="button-file" id="button-save" onclick="saveData()">Save</button>
+        <button class="button-file" id="button-load" onclick="loadData()">Load</button>
+        <div id="dynamic-parent" hidden></div>
+    </div>
+</body>
+
+<script>
+    var vertices = [];
+    var objects = [];
+
+    const canvas = document.querySelector('#glcanvas');
+    canvas.width = 800;
+    canvas.height = 530;
+
+    const gl = canvas.getContext('webgl');
+
+    if (!gl) {
+        alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+    }
+
+    var vertCode = `
+            attribute vec3 position;
+            attribute vec3 normal;
+
+            uniform mat4 Pmatrix;
+            uniform mat4 Vmatrix;
+            uniform mat4 Mmatrix;
+            uniform mat4 Nmatrix;
+
+            attribute vec3 color;
+            varying vec3 vLighting;
+            varying vec3 vColor;
+
+            void main(void) {
+                gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);
+                vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+                vec3 directionalLightColor = vec3(1, 1, 1);
+                vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
+                vec4 transformedNormal = Nmatrix*vec4(normal, 1.);
+                
+                float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+                vLighting = ambientLight + (directionalLightColor * directional);
+                vColor = color;
+            }
+            `;
+
+    var vertShader = gl.createShader(gl.VERTEX_SHADER);
+
+    var fragCode = 'precision mediump float;' +
+        'varying vec3 vColor;' +
+        'varying vec3 vLighting;' +
+
+        'void main(void) {' +
+        'gl_FragColor = vec4(vColor, 1.);' +
+        'gl_FragColor.rgb *= vLighting;' +
+        '}';
+
+    var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+    var shaderProgram = gl.createProgram();
+
+    function setupShader() {
+
+        gl.shaderSource(vertShader, vertCode);
+
+        gl.compileShader(vertShader);
+
+        gl.shaderSource(fragShader, fragCode);
+
+        gl.compileShader(fragShader);
+    }
+
+    function setupProgram() {
+
+        gl.attachShader(shaderProgram, vertShader);
+
+        gl.attachShader(shaderProgram, fragShader);
+
+        gl.linkProgram(shaderProgram);
+    }
+
+    setupShader();
+    setupProgram();
+</script>
+<script type="text/javascript" src="script.js"></script>
+<script>
+    document.getElementById('rotateX').value = oldValueRotX;
+    document.getElementById('rotateY').value = oldValueRotY;
+    document.getElementById('rotateZ').value = oldValueRotZ;
+    document.getElementById('angle').value = oldValueMove;
+</script>
+
+</html>
