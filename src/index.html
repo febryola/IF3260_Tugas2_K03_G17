@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="style.css">
     <title>3D WebGL Hollow Object</title>
     <script>
-        var oldValueRotX = 0;
-        var oldValueRotY = 0;
-        var oldValueRotZ = 0;
-        var oldValueMove = 0;
         var isShading = false;
+        var rotateXOld = 0;
+        var rotateYOld = 0;
+        var rotateZOld = 0;
+        var oldValueMove = 0;
     </script>
 
 </head>
@@ -19,7 +19,7 @@
     <div class="navbar">
         <h2>Menu</h2>
         <label>Pilih Objek</label>
-        <select id="objectlist" name="objectlist" onchange="resetValue()">
+        <select id="objectlist" name="objectlist" onchange="resetValueObject()">
                 <option value="cube">Kubus</option>
                 <option value="bangun2">Bangun ke 2</option>
                 <option value="bangun3">Bangun ke 3</option>
@@ -29,20 +29,20 @@
         <button id="button-proj" onclick="toOblique()">Oblique</button>
         <button id="button-proj" onclick="toPerspective()">Perspective</button>
         <label>Rotate</label><br/>
-        <label>X&nbsp;</label><input type="range" id="rotateX" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('x', this.value)"><br/>
-        <label>Y&nbsp;</label><input type="range" id="rotateY" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('y', this.value)"><br/>
-        <label>Z&nbsp;</label><input type="range" id="rotateZ" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotate('z', this.value)"><br/>
+        <label>X&nbsp;</label><input type="range" id="rotateX" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('x', this.value)"><br/>
+        <label>Y&nbsp;</label><input type="range" id="rotateY" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('y', this.value)"><br/>
+        <label>Z&nbsp;</label><input type="range" id="rotateZ" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('z', this.value)"><br/>
         <label>Scale</label><br/>
         <input type="number" id="scale" name="scale" min="0.1" step="0.1">
-        <button id="button-scale" onmousedown="updateScale()">Scale</button><br/>
+        <button id="button-scale" onmousedown="updateScaleFunc()">Scale</button><br/>
         <label>Translate</label>
         <br/>
-        <button id="button-translate" onmousedown="updateTranslate('x', -0.05)">←</button>
-        <button id="button-translate" onmousedown="updateTranslate('x', 0.05)">→</button>
-        <button id="button-translate" onmousedown="updateTranslate('y', 0.05)">↑</button>
-        <button id="button-translate" onmousedown="updateTranslate('y', -0.05)">↓</button>
+        <button id="button-translate" onmousedown="updateTranslateFunc('x', -0.05)">←</button>
+        <button id="button-translate" onmousedown="updateTranslateFunc('x', 0.05)">→</button>
+        <button id="button-translate" onmousedown="updateTranslateFunc('y', 0.05)">↑</button>
+        <button id="button-translate" onmousedown="updateTranslateFunc('y', -0.05)">↓</button>
         <br/>
-        <button id="button-tools" onclick="reset()">Reset</button>
+        <button id="button-tools" onclick="resetButton()">Reset</button>
         <br/>
         <label><b>Camera</b></label><br/>
         <label>Angle&nbsp;</label><input type="range" id="angle" name="camera" min="-360" max="360" step="1" oninput="updateMove()"><br/>
@@ -54,6 +54,11 @@
         <div class="switch-shader-container">
             <input type="checkbox" id="switch-shader" name="switch-shader" class="switch-shader">
             <label for="switch-shader" class="switch-shader-label"></label>
+        </div>
+        <span class="switch-animate-title">Animate</span>
+        <div class="switch-animate-container">
+            <input type="checkbox" id="switch-animate" name="switch-animate" class="switch-animate" onchange="toggleAnimate()">
+            <label for="switch-animate" class="switch-animate-label"></label>
         </div>
         <br/>
         <br/>
@@ -67,8 +72,7 @@
         3D WEBGL HOLLOW OBJECTS
     </div>
     <canvas id="glcanvas" width="pixel">
-            Your browser doesn't support the HTML5 canvas element
-        </canvas>
+            Your browser doesn't support the HTML5 canvas element </canvas>
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <!-- Modal content -->
@@ -109,8 +113,8 @@
     </div>
     <div class="row">
         <button class="button-file" id="button-help" onclick="help()">Help</button>
-        <button class="button-file" id="button-save" onclick="saveData()">Save</button>
-        <button class="button-file" id="button-load" onclick="loadData()">Load</button>
+        <button class="button-file" id="button-save" onclick="save()">Save</button>
+        <button class="button-file" id="button-load" onclick="load()">Load</button>
         <div id="dynamic-parent" hidden></div>
     </div>
 </body>
@@ -196,10 +200,12 @@
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="util/objek.js"></script>
 <script type="text/javascript" src="util/script.js"></script>
+<script type="text/javascript" src="util/transformasi.js"></script>
+<script type="text/javascript" src="util/animate.js"></script>
 <script>
-    document.getElementById('rotateX').value = oldValueRotX;
-    document.getElementById('rotateY').value = oldValueRotY;
-    document.getElementById('rotateZ').value = oldValueRotZ;
+    document.getElementById('rotateX').value = rotateXOld;
+    document.getElementById('rotateY').value = rotateYOld;
+    document.getElementById('rotateZ').value = rotateZOld;
     document.getElementById('angle').value = oldValueMove;
 </script>
 

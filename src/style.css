@@ -332,7 +332,61 @@ th {
 }
 
 
-/* Style the modal */
+/*switch-animate untuk shader*/
+
+.switch-animate-container {
+    position: relative;
+    display: inline-flex;
+    width: 60px;
+    height: 34px;
+    vertical-align: middle;
+}
+
+.switch-animate {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-animate-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.switch-animate-label:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.switch-animate:checked+.switch-animate-label {
+    background-color: #feadb9;
+}
+
+.switch-animate:checked+.switch-animate-label:before {
+    transform: translateX(26px);
+}
+
+.switch-animate-title {
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 60px;
+    font-weight: bold;
+    vertical-align: middle;
+}
 
 
 /* Style the modal */
