@@ -357,6 +357,7 @@ function resetButton() {
     objects.splice(0, 1); // menghapus objek dengan indeks ke-0
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // hapus tampilan layar
     setUpInitScene();
+    resetValueObject();
 
 }
 
