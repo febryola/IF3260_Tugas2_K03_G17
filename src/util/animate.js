@@ -34,7 +34,7 @@ function animate(axis) {
 
     // redraw the scene
     for (var i = 0; i < objects.length; i++) {
-        draw(objects[i].projMatrix, objects[i].modelMatrix, objects[i].offset, objects[i].end);
+        draw(objects[i].modelMatrix, objects[i].offset, objects[i].end);
     }
 
     // request next animation frame
