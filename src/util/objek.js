@@ -331,8 +331,8 @@ function setUpBufferFromObjects() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-var view_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+var view_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -10, 0, 0, 0, 0, 1];
+var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
 var zoomValue = 1
 
 // Menggambar Objek
@@ -408,6 +408,31 @@ function moveViewY(y) {
 
 function moveViewZ(z) {
   view_matrix[11] = -z;
+  redrawScene();
+}
+
+// Update projection type
+function toOrthographic() {
+  proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  redrawScene();
+}
+
+function toPerspective() {
+  // Assign some default values
+  var fieldOfViewInRadians = 30
+  var near = -1
+  var far = 1
+  var aspect = 1
+
+  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+  var rangeInv = 1.0 / (near - far);
+
+  proj_matrix = [
+    f / aspect, 0, 0, 0,
+    0, f, 0, 0,
+    0, 0, (near + far) * rangeInv, -1,
+    0, 0, near * far * rangeInv * 2, 0
+  ];
   redrawScene();
 }
 
