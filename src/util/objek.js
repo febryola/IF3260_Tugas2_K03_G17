@@ -331,12 +331,8 @@ function setUpBufferFromObjects() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-var view_matrix = [
-  1, 0, 0, 0, 
-  0, 1, 0, 0, 
-  0, 0, 1, 0, 
-  0, 0, 0, 1
-];
+var cameraPosition = [0, 0, 5];
+var view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
 
 var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
 var zoomValue = 1
@@ -404,19 +400,22 @@ function redrawScene() {
 // Update view_matrix
 function moveViewX(x) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-x
-  view_matrix[3] = -x;
+  cameraPosition[0] = x;
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
   redrawScene();
 }
 
 function moveViewY(y) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-y
-  view_matrix[7] = -y;
+  cameraPosition[1] = y;
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
   redrawScene();
 }
 
 function moveViewZ(z) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-z
-  view_matrix[11] = -z;
+  cameraPosition[2] = z;
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
   redrawScene();
 }
 
@@ -427,21 +426,26 @@ function toOrthographic() {
 }
 
 function toPerspective() {
+  function createPerspectiveMatrix(fov, aspect, near, far) {
+    const f = 1.0 / Math.tan(fov / 2.0);
+    const rangeInv = 1.0 / (near - far);
+  
+    return [
+      f / aspect, 0, 0, 0,
+      0, f, 0, 0,
+      0, 0, (near + far) * rangeInv, -1,
+      0, 0, near * far * rangeInv * 2, 0
+    ];
+  }
+
   // Assign some default values
-  var fieldOfViewInRadians = 30
-  var near = -1
-  var far = 1
+  var fov = 60
+  var near = 1
+  var far = 2000
   var aspect = 1
 
-  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
-  var rangeInv = 1.0 / (near - far);
+  proj_matrix = createPerspectiveMatrix(fov, aspect, near, far)
 
-  proj_matrix = [
-    f / aspect, 0, 0, 0,
-    0, f, 0, 0,
-    0, 0, (near + far) * rangeInv, -1,
-    0, 0, near * far * rangeInv * 2, 0
-  ];
   redrawScene();
 }
 
