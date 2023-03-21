@@ -331,7 +331,13 @@ function setUpBufferFromObjects() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-var view_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -10, 0, 0, 0, 0, 1];
+var view_matrix = [
+  1, 0, 0, 0, 
+  0, 1, 0, 0, 
+  0, 0, 1, 0, 
+  0, 0, 0, 1
+];
+
 var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
 var zoomValue = 1
 
@@ -397,16 +403,19 @@ function redrawScene() {
 
 // Update view_matrix
 function moveViewX(x) {
-  view_matrix[3] = x;
+  // "Pindahkan" setiap objek berlawanan arah di sumbu-x
+  view_matrix[3] = -x;
   redrawScene();
 }
 
 function moveViewY(y) {
+  // "Pindahkan" setiap objek berlawanan arah di sumbu-y
   view_matrix[7] = -y;
   redrawScene();
 }
 
 function moveViewZ(z) {
+  // "Pindahkan" setiap objek berlawanan arah di sumbu-z
   view_matrix[11] = -z;
   redrawScene();
 }
