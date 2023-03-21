@@ -445,11 +445,29 @@ function toPerspective() {
 
   // Assign some default values
   var fov = 45;
-  var near = 0.000001;
-  var far = 1000;
+  var near = 0.1;
+  var far = 100;
   var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
   proj_matrix = createPerspectiveMatrix(fov, aspect, near, far);
+
+  redrawScene();
+}
+
+function toOblique() {
+  function createObliqueProjectionMatrix(theta, d, k) {
+    var matrix = [
+      1, 0, -d * Math.cos(theta), 0,
+      0, 1, -d * Math.sin(theta), 0,
+      0, 0, 1, 0,
+      0, 0, k, 1
+    ]
+    
+    return matrix;
+  }
+
+  proj_matrix = createObliqueProjectionMatrix(Math.PI/4, 1, 1);
+  console.dir(proj_matrix);
 
   redrawScene();
 }
