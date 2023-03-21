@@ -331,7 +331,7 @@ function setUpBufferFromObjects() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-var cameraPosition = [0, 0, 5];
+var cameraPosition = [0, 0, 1];
 var view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
 
 var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
@@ -421,7 +421,12 @@ function moveViewZ(z) {
 
 // Update projection type
 function toOrthographic() {
-  proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+  proj_matrix = [
+    1, 0, 0, 0, 
+    0, 1, 0, 0, 
+    0, 0, 0, 0, 
+    0, 0, 0, 1
+  ];
   redrawScene();
 }
 
@@ -439,12 +444,12 @@ function toPerspective() {
   }
 
   // Assign some default values
-  var fov = 60
-  var near = 1
-  var far = 2000
-  var aspect = 1
+  var fov = 45;
+  var near = 0.000001;
+  var far = 1000;
+  var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
-  proj_matrix = createPerspectiveMatrix(fov, aspect, near, far)
+  proj_matrix = createPerspectiveMatrix(fov, aspect, near, far);
 
   redrawScene();
 }
