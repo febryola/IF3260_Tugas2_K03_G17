@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <title>3D WebGL Hollow Object</title>
     <script>
-        var isShading = false;
+        var shadingOn = false;
         var rotateXOld = 0;
         var rotateYOld = 0;
         var rotateZOld = 0;
@@ -55,7 +55,8 @@
         <br/>
         <span class="switch-shader-title">Shading</span>
         <div class="switch-shader-container">
-            <input type="checkbox" id="switch-shader" name="switch-shader" class="switch-shader">
+            <input type="checkbox" id="switch-shader" name="switch-shader" class="switch-shader"
+            onchange="toggleShading()">
             <label for="switch-shader" class="switch-shader-label"></label>
         </div>
         <span class="switch-animate-title">Animate</span>
@@ -201,10 +202,11 @@
     setupProgram();
 </script>
 <script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="util/shading.js"></script>
+<script type="text/javascript" src="util/transformasi.js"></script>
 <script type="text/javascript" src="util/matvec.js"></script>
 <script type="text/javascript" src="util/objek.js"></script>
 <script type="text/javascript" src="util/script.js"></script>
-<script type="text/javascript" src="util/transformasi.js"></script>
 <script type="text/javascript" src="util/animate.js"></script>
 <script>
     document.getElementById('rotateX').value = rotateXOld;

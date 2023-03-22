@@ -58,6 +58,52 @@ function translateFunc(x, y, z) {
     ];
 }
 
+function invertFunc(matrix) {
+    const n = matrix.length;
+    const identityMatrix = Array.from({ length: n }, (_, i) => {
+      return Array.from({ length: n }, (_, j) => i === j ? 1 : 0);
+    });
+  
+    for (let i = 0; i < n; i++) {
+      let pivot = matrix[i][i];
+  
+      for (let j = 0; j < n; j++) {
+        matrix[i][j] /= pivot;
+        identityMatrix[i][j] /= pivot;
+      }
+  
+      for (let k = 0; k < n; k++) {
+        if (k === i) continue;
+  
+        let factor = matrix[k][i] / matrix[i][i];
+  
+        for (let j = 0; j < n; j++) {
+          matrix[k][j] -= factor * matrix[i][j];
+          identityMatrix[k][j] -= factor * identityMatrix[i][j];
+        }
+      }
+    }
+  
+    return identityMatrix;
+  }
+
+function transposeFunc(matrix) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+
+    const result = [];
+    for (let j = 0; j < cols; j++) {
+        result[j] = [];
+        for (let i = 0; i < rows; i++) {
+        result[j][i] = matrix[i][j];
+        }
+    }
+
+    return result;
+}
+  
+  
+
 function multiply(a, b) {
     // multiply two 4x4 matrices
     let result = [];

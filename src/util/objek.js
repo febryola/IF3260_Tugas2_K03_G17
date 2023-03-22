@@ -343,9 +343,15 @@ function draw(model_matrix, start, end) {
   gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
   gl.uniformMatrix4fv(_Mmatrix, false, model_matrix);
 
+  
+  console.log(shadingOn)
   // belum diberi shading
-  let normalMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  gl.uniformMatrix4fv(_Nmatrix, false, normalMatrix);
+  if (shadingOn){
+    shading(model_matrix, view_matrix);
+  } else{
+    let normalMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    gl.uniformMatrix4fv(_Nmatrix, false, normalMatrix);  
+  }
 
   for (var i = start; i < end; i++) {
     gl.drawArrays(gl.TRIANGLE_FAN, i * 4, 4);
