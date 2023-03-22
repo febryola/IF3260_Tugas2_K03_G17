@@ -21,17 +21,3 @@ function cross(a, b) {
 function dot(a, b) {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
-
-// View matrix stuff
-function createViewMatrix(cameraPosition, target, up, zoomFactor) {
-  const zAxis = normalize(subtractVectors(cameraPosition, target));
-  const xAxis = normalize(cross(up, zAxis));
-  const yAxis = cross(zAxis, xAxis);
-
-  return [
-    xAxis[0] * zoomFactor, yAxis[0], zAxis[0], 0,
-    xAxis[1], yAxis[1] * zoomFactor, zAxis[1], 0,
-    xAxis[2], yAxis[2], zAxis[2] * zoomFactor, 0,
-    -dot(xAxis, cameraPosition), -dot(yAxis, cameraPosition), -dot(zAxis, cameraPosition), 1
-  ];
-}
