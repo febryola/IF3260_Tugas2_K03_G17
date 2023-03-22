@@ -332,10 +332,10 @@ function setUpBufferFromObjects() {
 }
 
 var cameraPosition = [0, 0, 1];
-var view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
+var zoomFactor = 1
 
+var view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
 var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
-var zoomValue = 1
 
 // Menggambar Objek
 function draw(model_matrix, start, end) {
@@ -343,8 +343,6 @@ function draw(model_matrix, start, end) {
   gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
   gl.uniformMatrix4fv(_Mmatrix, false, model_matrix);
 
-  
-  console.log(shadingOn)
   // belum diberi shading
   if (shadingOn){
     shading(model_matrix, view_matrix);
@@ -407,21 +405,30 @@ function redrawScene() {
 function moveViewX(x) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-x
   cameraPosition[0] = x;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
   redrawScene();
 }
 
 function moveViewY(y) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-y
   cameraPosition[1] = y;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
   redrawScene();
 }
 
 function moveViewZ(z) {
   // "Pindahkan" setiap objek berlawanan arah di sumbu-z
   cameraPosition[2] = z;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0]);
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+  redrawScene();
+}
+
+function updateZoom(zoomDiff) {
+  zoomFactor += zoomDiff;
+  if (zoomFactor <= 0) {
+    zoomFactor = 0.1
+  }
+  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
   redrawScene();
 }
 

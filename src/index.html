@@ -50,8 +50,8 @@
         <label>Y&nbsp;</label><input type="range" id="cameraY" name="camera" min="-1" max="1" step="0.05" oninput="moveViewY(parseFloat(this.value))"><br/>
         <label>Z&nbsp;</label><input type="range" id="cameraZ" name="camera" min="-1" max="1" step="0.05" oninput="moveViewZ(parseFloat(this.value))" value="1"><br/>
         <label>Zoom&nbsp;</label>
-        <button id="button-zoom" onmousedown="updateZoom(1.1)">In</button>
-        <button id="button-zoom" onmousedown="updateZoom(0.9)">Out</button>
+        <button id="button-zoom" onmousedown="updateZoom(0.1)">In</button>
+        <button id="button-zoom" onmousedown="updateZoom(-0.1)">Out</button>
         <br/>
         <span class="switch-shader-title">Shading</span>
         <div class="switch-shader-container">
