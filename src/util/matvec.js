@@ -1,3 +1,5 @@
+// 3D vector functionality
+
 function normalize(v) {
   const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   if (length > 0.00001) {
@@ -6,7 +8,7 @@ function normalize(v) {
   return [0, 0, 0];
 }
 
-function subtractVectors(a, b) {
+function subtract(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 

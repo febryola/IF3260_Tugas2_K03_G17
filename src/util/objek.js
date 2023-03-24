@@ -205,8 +205,6 @@ function setUpInitScene() {
     let limas_model_matrix = objects[1].modelMatrix
     objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
 
-
-
     for (var i = 0; i < objects.length; i++) {
         draw(
             objects[i].modelMatrix,

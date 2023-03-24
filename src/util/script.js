@@ -1,9 +1,10 @@
 // This function resets the values of the rotation and scale input fields to their default values, and resets the old rotation values to 0.
 function resetValueObject() {
     // mengubah nilai proj matrix dan view matrix menjadi default awal
-    view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
-    proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
-
+    zoomLevel = 1;
+    cameraPosition [0, 0, 1];
+    view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
+    proj_matrix = getOrthoMatrix(-defaultWidth/2, defaultWidth/2, -defaultHeight/2, defaultHeight/2, -2, 2);
 
     document.getElementById('rotateX').value = 0;
     document.getElementById('rotateY').value = 0;
