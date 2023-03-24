@@ -24,14 +24,14 @@ let zoomLevel = 1;
 
 function getViewMatrix(cameraPosition, targetPosition, upDirection, zoomLevel) {
   // Hitung orientasi kamera
-  const zAxis = normalize(subtract(targetPosition, cameraPosition));
+  const zAxis = normalize(subtract(cameraPosition, targetPosition));
   const xAxis = normalize(cross(upDirection, zAxis));
   const yAxis = cross(zAxis, xAxis);
 
   return [
-    xAxis[0] * zoomLevel, yAxis[0], -zAxis[0], 0,
-    xAxis[1], yAxis[1] * zoomLevel, -zAxis[1], 0,
-    xAxis[2], yAxis[2], -zAxis[2] * zoomLevel, 0,
+    xAxis[0] * zoomLevel, yAxis[0], zAxis[0], 0,
+    xAxis[1], yAxis[1] * zoomLevel, zAxis[1], 0,
+    xAxis[2], yAxis[2], zAxis[2] * zoomLevel, 0,
     -dot(xAxis, cameraPosition), -dot(yAxis, cameraPosition), -dot(zAxis, cameraPosition), 1
   ];
 }
