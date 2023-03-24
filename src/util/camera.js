@@ -90,6 +90,18 @@ function getObliqueMatrix(left, right, bottom, top, near, far, theta, phi) {
   return multiply(ortMatrix, shearMatrix);
 }
 
+function getPerspectiveMatrix(fov, aspect, near, far) {
+  const f = 1.0 / Math.tan(fov / 2.0);
+  const rangeInv = 1.0 / (near - far);
+
+  return [
+    f / aspect, 0, 0, 0,
+    0, f, 0, 0,
+    0, 0, (near + far) * rangeInv, -1,
+    0, 0, near * far * rangeInv * 2, 0
+  ];
+}
+
 let proj_matrix = getOrthoMatrix(-defaultWidth/2, defaultWidth/2, -defaultHeight/2, defaultHeight/2, -2, 2);
 
 // Update projection type
@@ -108,25 +120,13 @@ function toOrthographic() {
 }
 
 function toPerspective() {
-  function createPerspectiveMatrix(fov, aspect, near, far) {
-    const f = 1.0 / Math.tan(fov / 2.0);
-    const rangeInv = 1.0 / (near - far);
-  
-    return [
-      f / aspect, 0, 0, 0,
-      0, f, 0, 0,
-      0, 0, (near + far) * rangeInv, -1,
-      0, 0, near * far * rangeInv * 2, 0
-    ];
-  }
-
   // Assign some default values
   var fov = 45;
   var near = 0.1;
   var far = 1000;
   var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
-  proj_matrix = createPerspectiveMatrix(fov, aspect, near, far);
+  proj_matrix = getPerspectiveMatrix(fov, aspect, near, far);
 
   redrawScene();
 }
