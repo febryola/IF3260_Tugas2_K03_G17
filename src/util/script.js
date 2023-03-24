@@ -1,5 +1,10 @@
 // This function resets the values of the rotation and scale input fields to their default values, and resets the old rotation values to 0.
 function resetValueObject() {
+    // mengubah nilai proj matrix dan view matrix menjadi default awal
+    view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+    proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
+
+
     document.getElementById('rotateX').value = 0;
     document.getElementById('rotateY').value = 0;
     document.getElementById('rotateZ').value = 0;
@@ -7,8 +12,13 @@ function resetValueObject() {
     rotateXOld = 0;
     rotateYOld = 0;
     rotateZOld = 0;
-}
 
+    // reset value pada camera
+    document.getElementById('cameraX').value = 0;
+    document.getElementById('cameraY').value = 0;
+    document.getElementById('cameraZ').value = 1;
+
+}
 // This function calculates the center point of an array of points specified by their x, y, and z coordinates.
 function getPointCenter(start, end, arr) {
     // Initialize variables to store the minimum and maximum x and y values of the array of points.

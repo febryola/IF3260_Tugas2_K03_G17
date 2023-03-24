@@ -4,14 +4,12 @@ var _Mmatrix;
 var _Nmatrix;
 
 for (var i = 0; i < 12 * 4 * 6; i++) {
-    if (i % 3 == 0) {
-        vertices.push(verticeKubus[i]);
-    } else {
-        vertices.push(verticeKubus[i]);
-    }
+    vertices.push(verticeKubus[i]);
+
 }
-for (var i = 0; i < 12*4*4; i++){
-  vertices.push(limasSegiempatVertice[i]);
+
+for (var i = 0; i < 12 * 4 * 4; i++) {
+    vertices.push(limasSegiempatVertice[i]);
 }
 
 function setUpBuffer() {
@@ -158,12 +156,12 @@ function draw(model_matrix, start, end) {
     gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
     gl.uniformMatrix4fv(_Mmatrix, false, model_matrix);
 
-  if (shadingOn){
-    shading(model_matrix, view_matrix);
-  } else{
-    let normalMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    gl.uniformMatrix4fv(_Nmatrix, false, normalMatrix);  
-  }
+    if (shadingOn) {
+        shading(model_matrix, view_matrix);
+    } else {
+        let normalMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        gl.uniformMatrix4fv(_Nmatrix, false, normalMatrix);
+    }
 
     for (var i = start; i < end; i++) {
         gl.drawArrays(gl.TRIANGLE_FAN, i * 4, 4);
@@ -184,49 +182,67 @@ function setUpInitScene() {
         modelMatrix: model_matrix,
     });
 
-  objects.push({
-    "name" : "limas",
-    "offset" : 24,
-    "end" : 40,
-    "numVertices" : 64,
-    "vertices" : vertices.slice(96*3, 96*3+64*3),
-    "color" : verticeColors.slice(96*3, 96*3+64*3),
-    "normals" : vertexNormals.slice(96*3, 96*3+64*3),
-    "projMatrix" : proj_matrix,
-    "modelMatrix" : model_matrix
- });
+    objects.push({
+        "name": "limas",
+        "offset": 24,
+        "end": 40,
+        "numVertices": 64,
+        "vertices": vertices.slice(96 * 3, 96 * 3 + 64 * 3),
+        "color": verticeColors.slice(96 * 3, 96 * 3 + 64 * 3),
+        "normals": vertexNormals.slice(96 * 3, 96 * 3 + 64 * 3),
+        "projMatrix": proj_matrix,
+        "modelMatrix": model_matrix
+    });
 
-  var init_translate_cube = translateFunc(0, 0.5, 0);
-  var init_translate_limas = translateFunc(-0.5, -0.5, 0);
-  
-  // cube
-  let cube_model_matrix = objects[0].modelMatrix
-  objects[0].modelMatrix = multiply(cube_model_matrix, init_translate_cube);
+    var init_translate_cube = translateFunc(0, 0.5, 0);
+    var init_translate_limas = translateFunc(-0.5, -0.5, 0);
 
-  // limas
-  let limas_model_matrix = objects[1].modelMatrix
-  objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
+    // cube
+    let cube_model_matrix = objects[0].modelMatrix
+    objects[0].modelMatrix = multiply(cube_model_matrix, init_translate_cube);
+
+    // limas
+    let limas_model_matrix = objects[1].modelMatrix
+    objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
 
 
 
-  for (var i = 0; i < objects.length; i++) {
-    draw(
-      objects[i].modelMatrix,
-      objects[i].offset,
-      objects[i].end
-    );
-  }
+    for (var i = 0; i < objects.length; i++) {
+        draw(
+            objects[i].modelMatrix,
+            objects[i].offset,
+            objects[i].end
+        );
+    }
+    document.getElementById('scale').value = 1;
 
     let animateCheckbox = document.getElementById("switch-animate");
     animateCheckbox.checked = true;
 }
 
 function resetButton() {
-    objects.splice(0, 1); // menghapus objek dengan indeks ke-0
+    // menghapus semua objek yang ada pada canvas dengan mengosongkan array objects
+    objects = [];
+
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // hapus tampilan layar
-    setUpInitScene();
+
+    // ubah terlebih dahulu nilai pada cameraPosition
+    cameraPosition = [0, 0, 1];
+
+    // mengubah zoom menjadi 1
+    // mengubah value zoom agar ke posisi default
+    zoomFactor = 1;
+
     resetValueObject();
+    setUpInitScene();
+
+    // menghapus shading dan mengubah value pada checkbox
+    let shadingCheckbox = document.getElementById("switch-shader");
+    shadingCheckbox.checked = false;
+    shadingOn = false;
+
 }
+
 
 // Function to redraw scene
 function redrawScene() {
@@ -238,6 +254,7 @@ function redrawScene() {
             objects[i].end
         );
     }
+
 }
 
 setUpBuffer();

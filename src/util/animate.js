@@ -55,6 +55,7 @@ function toggleAnimate() {
         currentAngles.y = 0;
         currentAngles.z = 0;
     }
+
 }
 // aktifkan animasi
 toggleAnimate();
