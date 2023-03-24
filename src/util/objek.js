@@ -180,6 +180,9 @@ function setUpInitScene() {
         color: verticeColors.slice(0, 96 * 3),
         normals: vertexNormals.slice(0, 96 * 3),
         modelMatrix: model_matrix,
+        rotateX : 0,
+        rotateY : 0,
+        rotateZ : 0,
     });
 
     objects.push({
@@ -191,7 +194,10 @@ function setUpInitScene() {
         color: verticeColors.slice(96 * 3, 96 * 3 + 64 * 3),
         normals: vertexNormals.slice(96 * 3, 96 * 3 + 64 * 3),
         projMatrix: proj_matrix,
-        modelMatrix: model_matrix
+        modelMatrix: model_matrix,
+        rotateX : 0,
+        rotateY : 0,
+        rotateZ : 0,
     });
 
     var init_translate_cube = translateFunc(0, 0.5, 0);

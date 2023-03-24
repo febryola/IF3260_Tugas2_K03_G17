@@ -1,3 +1,18 @@
+function changeValueObject(){
+    // get the selected object and its index
+    selectedObject = document.getElementById('objectlist').value;
+    let indexObjectSelected = getIndexObjectSelected(selectedObject);
+    let obj = objects[indexObjectSelected]
+
+    document.getElementById('rotateX').value = obj.rotateX;
+    document.getElementById('rotateY').value = obj.rotateY;
+    document.getElementById('rotateZ').value = obj.rotateZ;
+    document.getElementById('scale').value = 1;
+    rotateXOld = obj.rotateX;
+    rotateYOld = obj.rotateY;
+    rotateZOld = obj.rotateZ;
+}
+
 // This function resets the values of the rotation and scale input fields to their default values, and resets the old rotation values to 0.
 function resetValueObject() {
     // mengubah nilai proj matrix dan view matrix menjadi default awal
@@ -116,8 +131,8 @@ function importModel(){
                 objects.push(object)
             }
 
+            changeValueObject()            
             redrawScene()
-            
         });
         
         reader.readAsText(fileUpload.files[0]); // Read the uploaded file

@@ -193,6 +193,9 @@ function updateRotateFunc(axis, value) {
     // multiply the current model matrix with the rotation matrix
     let currentModelMatrix = objects[indexObjectSelected].modelMatrix;
     objects[indexObjectSelected].modelMatrix = multiply(model_matrix, currentModelMatrix);
+    objects[indexObjectSelected].rotateX = rotateXOld
+    objects[indexObjectSelected].rotateY = rotateYOld
+    objects[indexObjectSelected].rotateZ = rotateZOld
 
     // redraw the scene
     for (var i = 0; i < objects.length; i++) {
