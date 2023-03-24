@@ -184,28 +184,28 @@ function setUpInitScene() {
         modelMatrix: model_matrix,
     });
 
-  objects.push({
-    "name" : "limas",
-    "offset" : 24,
-    "end" : 40,
-    "numVertices" : 64,
-    "vertices" : vertices.slice(96*3, 96*3+64*3),
-    "color" : verticeColors.slice(96*3, 96*3+64*3),
-    "normals" : vertexNormals.slice(96*3, 96*3+64*3),
-    "projMatrix" : proj_matrix,
-    "modelMatrix" : model_matrix
- });
+//   objects.push({
+//     "name" : "limas",
+//     "offset" : 24,
+//     "end" : 40,
+//     "numVertices" : 64,
+//     "vertices" : vertices.slice(96*3, 96*3+64*3),
+//     "color" : verticeColors.slice(96*3, 96*3+64*3),
+//     "normals" : vertexNormals.slice(96*3, 96*3+64*3),
+//     "projMatrix" : proj_matrix,
+//     "modelMatrix" : model_matrix
+//  });
 
-  var init_translate_cube = translateFunc(0, 0.5, 0);
-  var init_translate_limas = translateFunc(-0.5, -0.5, 0);
+//   var init_translate_cube = translateFunc(0, 0.5, 0);
+//   var init_translate_limas = translateFunc(-0.5, -0.5, 0);
   
-  // cube
-  let cube_model_matrix = objects[0].modelMatrix
-  objects[0].modelMatrix = multiply(cube_model_matrix, init_translate_cube);
+//   // cube
+//   let cube_model_matrix = objects[0].modelMatrix
+//   objects[0].modelMatrix = multiply(cube_model_matrix, init_translate_cube);
 
-  // limas
-  let limas_model_matrix = objects[1].modelMatrix
-  objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
+//   // limas
+//   let limas_model_matrix = objects[1].modelMatrix
+//   objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
 
 
 

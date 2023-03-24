@@ -1,62 +1,110 @@
-var cameraPosition = [0, 0, 1];
-var zoomFactor = 1
+// =========
+// Constants
+// =========
+const defaultTargetPosition = [0, 0, 0];
+const defaultUpDirection = [0, 1, 0];
 
-var view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
-var proj_matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]; // Default: Ortographic
+// Clip space di [-1, 1]
+const defaultWidth = 2;
+const defaultHeight = 2;
+const defaultDepth = 2;
 
-// View matrix stuff
-function createViewMatrix(cameraPosition, target, up, zoomFactor) {
-  const zAxis = normalize(subtractVectors(cameraPosition, target));
-  const xAxis = normalize(cross(up, zAxis));
+const orthoMatrix = [
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 0, 0,
+  0, 0, 0, 1
+];
+
+// ===========
+// View matrix
+// ===========
+let cameraPosition = [0, 0, 1];
+let zoomLevel = 1;
+
+function getViewMatrix(cameraPosition, targetPosition, upDirection, zoomLevel) {
+  // Hitung orientasi kamera
+  const zAxis = normalize(subtract(targetPosition, cameraPosition));
+  const xAxis = normalize(cross(upDirection, zAxis));
   const yAxis = cross(zAxis, xAxis);
 
   return [
-    xAxis[0] * zoomFactor, yAxis[0], zAxis[0], 0,
-    xAxis[1], yAxis[1] * zoomFactor, zAxis[1], 0,
-    xAxis[2], yAxis[2], zAxis[2] * zoomFactor, 0,
+    xAxis[0] * zoomLevel, yAxis[0], -zAxis[0], 0,
+    xAxis[1], yAxis[1] * zoomLevel, -zAxis[1], 0,
+    xAxis[2], yAxis[2], -zAxis[2] * zoomLevel, 0,
     -dot(xAxis, cameraPosition), -dot(yAxis, cameraPosition), -dot(zAxis, cameraPosition), 1
   ];
 }
 
+let view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
+
 // Update view_matrix
 function moveViewX(x) {
-  // "Pindahkan" setiap objek berlawanan arah di sumbu-x
   cameraPosition[0] = x;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+  view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
   redrawScene();
 }
 
 function moveViewY(y) {
-  // "Pindahkan" setiap objek berlawanan arah di sumbu-y
   cameraPosition[1] = y;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+  view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
   redrawScene();
 }
 
 function moveViewZ(z) {
-  // "Pindahkan" setiap objek berlawanan arah di sumbu-z
   cameraPosition[2] = z;
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+  view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
   redrawScene();
 }
 
 function updateZoom(zoomDiff) {
-  zoomFactor += zoomDiff;
-  if (zoomFactor <= 0) {
-    zoomFactor = 0.1
+  console.log("called!");
+  zoomLevel += zoomDiff;
+  if (zoomLevel <= 0) {
+    zoomLevel = 0.1
   }
-  view_matrix = createViewMatrix(cameraPosition, [0, 0, 0], [0, 1, 0], zoomFactor);
+  view_matrix = getViewMatrix(cameraPosition, defaultTargetPosition, defaultUpDirection, zoomLevel);
   redrawScene();
 }
 
-// Update projection type
-function toOrthographic() {
-  proj_matrix = [
-    1, 0, 0, 0, 
-    0, 1, 0, 0, 
-    0, 0, 0, 0, 
+// =================
+// Projection Matrix
+// =================
+function getOrthoMatrix(left, right, bottom, top, near, far) {
+  const STMatrix = [
+    2/(right - left), 0, 0, -(right + left)/(right - left),
+    0, 2/(top - bottom), 0, -(top + bottom)/(top - bottom),
+    0, 0, -2/(far - near), -(far + near)/(near - far),
     0, 0, 0, 1
   ];
+  return STMatrix;
+}
+
+function getObliqueMatrix(left, right, bottom, top, near, far, theta, phi) {
+  const ortMatrix = getOrthoMatrix(left, right, bottom, top, near, far);
+  const shearMatrix = [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    -1 / Math.tan(theta), -1 / Math.tan(phi), 1, 0,
+    0, 0, 0, 1 
+  ];
+  return multiply(shearMatrix, ortMatrix);
+}
+
+let proj_matrix = getOrthoMatrix(-defaultWidth/2, defaultWidth/2, -defaultHeight/2, defaultHeight/2, -2, 2);
+
+// Update projection type
+function toOrthographic() {
+  const left = -defaultWidth/2;
+  const right = defaultWidth/2;
+  const bottom = -defaultHeight/2;
+  const top = defaultHeight/2;
+
+  const near = -2;
+  const far = 2;
+
+  proj_matrix = getOrthoMatrix(left, right, bottom, top, near, far);
+
   redrawScene();
 }
 
@@ -76,7 +124,7 @@ function toPerspective() {
   // Assign some default values
   var fov = 45;
   var near = 0.1;
-  var far = 100;
+  var far = 1000;
   var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
   proj_matrix = createPerspectiveMatrix(fov, aspect, near, far);
@@ -85,19 +133,15 @@ function toPerspective() {
 }
 
 function toOblique() {
-  function createObliqueProjectionMatrix(theta, d, k) {
-    var matrix = [
-      1, 0, -d * Math.cos(theta), 0,
-      0, 1, -d * Math.sin(theta), 0,
-      0, 0, 1, 0,
-      0, 0, k, 1
-    ]
-    
-    return matrix;
-  }
+  const left = -defaultWidth/2;
+  const right = defaultWidth/2;
+  const bottom = -defaultHeight/2;
+  const top = defaultHeight/2;
 
-  proj_matrix = createObliqueProjectionMatrix(Math.PI/4, 1, 1);
-  console.dir(proj_matrix);
+  const near = -2;
+  const far = 2;
+
+  proj_matrix = getObliqueMatrix(left, right, bottom, top, near, far, 64 / 180 * Math.PI, 64 / 180 * Math.PI);
 
   redrawScene();
 }
