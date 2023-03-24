@@ -49,6 +49,38 @@ for (var i = 0; i < 12 * 4 * 6; i++) {
   }
 }
 
+var limasSegiempatVertice = [
+  //bottom face
+  -0.2,-0.2,0.2, -0.16,-0.2,0.2, -0.16,-0.2,-0.2, -0.2,-0.2,-0.2,
+  0.16,-0.2,0.2, 0.2,-0.2,0.2, 0.2,-0.2,-0.2, 0.16,-0.2,-0.2,
+  -0.2,-0.2,0.2, 0.2,-0.2,0.2, 0.2,-0.2,0.16, -0.2,-0.2,0.16,
+  -0.2,-0.2,-0.2, 0.2,-0.2,-0.2, 0.2,-0.2,-0.16, -0.2,-0.2,-0.16,
+
+  //right face
+  0.2,-0.2,0.2, 0.2,-0.2,0.16, 0,0.2,-0.02, 0,0.2,0.02,
+  0.2,-0.2,-0.2, 0.2,-0.2,-0.16, 0,0.2,0.02, 0,0.2,-0.02,
+  0.2,-0.2,0.2, 0.2,-0.2,-0.2, 0.16,-0.16,-0.16, 0.16,-0.16,0.16,
+
+  //front face
+  -0.2,-0.2,0.2, 0.2,-0.2,0.2, 0.16,-0.16,0.16, -0.16,-0.16,0.16,
+  -0.2,-0.2,0.2, -0.16,-0.2,0.2, 0.02,0.2,0.02, 0,0.2,0.02,
+  0.16,-0.2,0.2, 0.2,-0.2,0.2, 0.02,0.2,0.02, 0,0.2,0.02,
+
+  //left face
+  -0.2,-0.2,0.2, -0.2,-0.2,0.16, 0,0.2,-0.02, 0,0.2,0.02,
+  -0.2,-0.2,-0.2, -0.2,-0.2,-0.16, 0,0.2,0.02, 0,0.2,-0.02,
+  -0.2,-0.2,0.2, -0.2,-0.2,-0.2, -0.16,-0.16,-0.16, -0.16,-0.16,0.16,
+
+  //back face
+  -0.2,-0.2,-0.2, 0.2,-0.2,-0.2, 0.16,-0.16,-0.16, -0.16,-0.16,-0.16,
+  -0.2,-0.2,-0.2, -0.16,-0.2,-0.2, 0.02,0.2,0.02, 0,0.2,0.02,
+  0.16,-0.2,-0.2, 0.2,-0.2,-0.2, 0.02,0.2,0.02, 0,0.2,0.02,
+];
+
+for (var i = 0; i < 12*4*4; i++){
+  vertices.push(limasSegiempatVertice[i]);
+}
+
 var verticeColors = [
   1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
   1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
@@ -337,7 +369,6 @@ function draw(model_matrix, start, end) {
   gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
   gl.uniformMatrix4fv(_Mmatrix, false, model_matrix);
 
-  // belum diberi shading
   if (shadingOn){
     shading(model_matrix, view_matrix);
   } else{
@@ -363,6 +394,31 @@ function setUpInitScene() {
     normals: vertexNormals.slice(0, 96 * 3),
     modelMatrix: model_matrix,
   });
+
+  objects.push({
+    "name" : "limas",
+    "offset" : 24,
+    "end" : 40,
+    "numVertices" : 64,
+    "vertices" : vertices.slice(96*3, 96*3+64*3),
+    "color" : verticeColors.slice(96*3, 96*3+64*3),
+    "normals" : vertexNormals.slice(96*3, 96*3+64*3),
+    "projMatrix" : proj_matrix,
+    "modelMatrix" : model_matrix
+ });
+
+  var init_translate_cube = translateFunc(0, 0.5, 0);
+  var init_translate_limas = translateFunc(-0.5, -0.5, 0);
+  
+  // cube
+  let cube_model_matrix = objects[0].modelMatrix
+  objects[0].modelMatrix = multiply(cube_model_matrix, init_translate_cube);
+
+  // limas
+  let limas_model_matrix = objects[1].modelMatrix
+  objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
+
+
 
   for (var i = 0; i < objects.length; i++) {
     draw(
