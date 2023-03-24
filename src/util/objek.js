@@ -183,15 +183,15 @@ function setUpInitScene() {
     });
 
     objects.push({
-        "name": "limas",
-        "offset": 24,
-        "end": 40,
-        "numVertices": 64,
-        "vertices": vertices.slice(96 * 3, 96 * 3 + 64 * 3),
-        "color": verticeColors.slice(96 * 3, 96 * 3 + 64 * 3),
-        "normals": vertexNormals.slice(96 * 3, 96 * 3 + 64 * 3),
-        "projMatrix": proj_matrix,
-        "modelMatrix": model_matrix
+        name: "limas",
+        offset: 24,
+        end: 40,
+        numVertices: 64,
+        vertices: vertices.slice(96 * 3, 96 * 3 + 64 * 3),
+        color: verticeColors.slice(96 * 3, 96 * 3 + 64 * 3),
+        normals: vertexNormals.slice(96 * 3, 96 * 3 + 64 * 3),
+        projMatrix: proj_matrix,
+        modelMatrix: model_matrix
     });
 
     var init_translate_cube = translateFunc(0, 0.5, 0);

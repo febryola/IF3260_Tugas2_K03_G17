@@ -92,6 +92,39 @@ function save() {
     linkElement.click();
 }
 
+function load(){
+    var fileUpload = document.getElementById("file-load");
+    fileUpload.click()
+}
+
+function importModel(){
+    var fileUpload = document.getElementById("file-load");
+    if (fileUpload.value !== null){
+        var reader = new FileReader(); // File reader to read the file 
+        
+        // This event listener will happen when the reader has read the file
+        reader.addEventListener('load', function() {
+            var result = JSON.parse(reader.result); // Parse the result into an object 
+          
+            console.log(result);
+
+            // menghapus semua objek yang ada pada canvas dengan mengosongkan array objects
+            objects = [];
+
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // hapus tampilan layar
+            for (let object of result){
+                objects.push(object)
+            }
+
+            redrawScene()
+            
+        });
+        
+        reader.readAsText(fileUpload.files[0]); // Read the uploaded file
+    }
+}
+
+
 // This code adds an event listener to the canvas element that listens for a mousedown event and calls the getMousePosition function.
 var canvasElement = document.querySelector("#glcanvas");
 canvasElement.addEventListener('mousedown', (e) => {
