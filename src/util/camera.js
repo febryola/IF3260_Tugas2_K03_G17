@@ -87,7 +87,7 @@ function getObliqueMatrix(left, right, bottom, top, near, far, theta, phi) {
     -1 / Math.tan(theta), -1 / Math.tan(phi), 1, 0,
     0, 0, 0, 1 
   ];
-  return multiply(shearMatrix, ortMatrix);
+  return multiply(ortMatrix, shearMatrix);
 }
 
 let proj_matrix = getOrthoMatrix(-defaultWidth/2, defaultWidth/2, -defaultHeight/2, defaultHeight/2, -2, 2);
