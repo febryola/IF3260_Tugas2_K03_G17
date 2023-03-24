@@ -31,7 +31,7 @@ function getViewMatrix(cameraPosition, targetPosition, upDirection, zoomLevel) {
   return [
     xAxis[0] * zoomLevel, yAxis[0], zAxis[0], 0,
     xAxis[1], yAxis[1] * zoomLevel, zAxis[1], 0,
-    xAxis[2], yAxis[2], zAxis[2] * zoomLevel, 0,
+    xAxis[2], yAxis[2], zAxis[2], 0,
     -dot(xAxis, cameraPosition), -dot(yAxis, cameraPosition), -dot(zAxis, cameraPosition), 1
   ];
 }
@@ -58,7 +58,6 @@ function moveViewZ(z) {
 }
 
 function updateZoom(zoomDiff) {
-  console.log("called!");
   zoomLevel += zoomDiff;
   if (zoomLevel <= 0) {
     zoomLevel = 0.1
