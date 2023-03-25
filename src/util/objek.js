@@ -12,6 +12,10 @@ for (var i = 0; i < 12 * 4 * 4; i++) {
     vertices.push(limasSegiempatVertice[i]);
 }
 
+for (var i = 0; i < prismaSegitigaVertice.length; i ++) {
+    vertices.push(prismaSegitigaVertice[i]);
+}
+
 function setUpBuffer() {
     // Create and store data into vertex buffer
     var vertex_buffer = gl.createBuffer();
@@ -194,8 +198,23 @@ function setUpInitScene() {
         "modelMatrix": model_matrix
     });
 
-    var init_translate_cube = translateFunc(0, 0.5, 0);
-    var init_translate_limas = translateFunc(-0.5, -0.5, 0);
+
+    let prismVertices = prismaSegitigaVertice.length / 3
+    objects.push({
+        "name": "prisma",
+        "offset": 40,
+        "end": 40 + prismVertices / 4,
+        "numVertices": prismVertices,
+        "vertices": vertices.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        "color": verticeColors.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        "normals": vertexNormals.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        "projMatrix": proj_matrix,
+        "modelMatrix": model_matrix
+    })
+
+    var init_translate_cube = translateFunc(0, 0.3, 0);
+    var init_translate_limas = translateFunc(-0.3, -0.3, 0);
+    var init_translate_prism = translateFunc(0.3, -0.3, 0);
 
     // cube
     let cube_model_matrix = objects[0].modelMatrix
@@ -205,7 +224,12 @@ function setUpInitScene() {
     let limas_model_matrix = objects[1].modelMatrix
     objects[1].modelMatrix = multiply(limas_model_matrix, init_translate_limas);
 
+    // limas
+    let prism_model_matrix = objects[2].modelMatrix
+    objects[2].modelMatrix = multiply(prism_model_matrix, init_translate_prism);
+
     for (var i = 0; i < objects.length; i++) {
+        console.log("Drawing object", i);
         draw(
             objects[i].modelMatrix,
             objects[i].offset,
