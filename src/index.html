@@ -42,7 +42,7 @@
         <button id="button-translate" onmousedown="updateTranslateFunc('y', 0.05)">↑</button>
         <button id="button-translate" onmousedown="updateTranslateFunc('y', -0.05)">↓</button>
         <br/>
-        <button id="button-tools" onclick="resetButton()">Reset</button>
+        <button id="button-tools" onclick="resetButton()">Reset object</button>
         <br/>
         <label><b>Camera</b></label><br/>
         <label>Position&nbsp;</label><br/>
@@ -53,6 +53,7 @@
         <button id="button-zoom" onmousedown="updateZoom(0.1)">In</button>
         <button id="button-zoom" onmousedown="updateZoom(-0.1)">Out</button>
         <br/>
+        <button id="button-tools" onclick="resetCamera()">Reset camera</button>
         <span class="switch-shader-title">Shading</span>
         <div class="switch-shader-container">
             <input type="checkbox" id="switch-shader" name="switch-shader" class="switch-shader" onchange="toggleShading()">

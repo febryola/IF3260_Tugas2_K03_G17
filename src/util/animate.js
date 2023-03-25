@@ -55,7 +55,16 @@ function toggleAnimate() {
         currentAngles.y = 0;
         currentAngles.z = 0;
     }
-
 }
+
+function stopAnimation() {
+    cancelAnimationFrame(animateId.x);
+    cancelAnimationFrame(animateId.y);
+    cancelAnimationFrame(animateId.z);
+    currentAngles.x = 0;
+    currentAngles.y = 0;
+    currentAngles.z = 0;
+}
+
 // aktifkan animasi
 toggleAnimate();
