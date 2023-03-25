@@ -360,6 +360,8 @@ function resetCamera() {
 
 // Function to redraw scene
 function redrawScene() {
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // hapus tampilan layar
+    
     // redraw the scene
     for (var i = 0; i < objects.length; i++) {
         draw(
