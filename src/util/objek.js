@@ -207,15 +207,18 @@ function setUpInitScene() {
 
     let prismVertices = prismaSegitigaVertice.length / 3
     objects.push({
-        "name": "prisma",
-        "offset": 40,
-        "end": 40 + prismVertices / 4,
-        "numVertices": prismVertices,
-        "vertices": vertices.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
-        "color": verticeColors.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
-        "normals": vertexNormals.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
-        "projMatrix": proj_matrix,
-        "modelMatrix": model_matrix
+        name: "prisma",
+        offset: 40,
+        end: 40 + prismVertices / 4,
+        numVertices: prismVertices,
+        vertices: vertices.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        color: verticeColors.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        normals: vertexNormals.slice(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3),
+        projMatrix: proj_matrix,
+        modelMatrix: model_matrix,
+        rotateX : 0,
+        rotateY : 0,
+        rotateZ : 0,
     })
 
     console.log(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3)

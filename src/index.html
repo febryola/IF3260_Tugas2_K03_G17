@@ -29,9 +29,9 @@
         <button id="button-proj" onclick="toOblique()">Oblique</button>
         <button id="button-proj" onclick="toPerspective()">Perspective</button>
         <label>Rotate</label><br/>
-        <label>X&nbsp;</label><input type="range" id="rotateX" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('x', this.value)"><br/>
-        <label>Y&nbsp;</label><input type="range" id="rotateY" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('y', this.value)"><br/>
-        <label>Z&nbsp;</label><input type="range" id="rotateZ" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('z', this.value)"><br/>
+        <label>X&nbsp;</label><input type="range" id="rotateX" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('x', parseFloat(this.value))"><br/>
+        <label>Y&nbsp;</label><input type="range" id="rotateY" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('y', parseFloat(this.value))"><br/>
+        <label>Z&nbsp;</label><input type="range" id="rotateZ" name="scale" min="-3.3" max="3.3" step="0.05" oninput="updateRotateFunc('z', parseFloat(this.value))"><br/>
         <label>Scale</label><br/>
         <input type="number" id="scale" name="scale" min="0.1" step="0.1">
         <button id="button-scale" onmousedown="updateScaleFunc()">Scale</button><br/>
