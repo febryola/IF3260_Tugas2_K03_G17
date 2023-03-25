@@ -218,6 +218,9 @@ function setUpInitScene() {
         "modelMatrix": model_matrix
     })
 
+    console.log(96 * 3 + 64 * 3, 96 * 3 + 64 * 3 + prismVertices * 3)
+    console.log(objects[2].normals);
+
     var init_translate_cube = translateFunc(0, 0.3, 0);
     var init_translate_limas = translateFunc(-0.3, -0.3, 0);
     var init_translate_prism = translateFunc(0.3, -0.3, 0);
