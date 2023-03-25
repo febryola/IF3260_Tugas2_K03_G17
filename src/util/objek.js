@@ -333,11 +333,6 @@ function resetButton() {
 
     resetValueObject();
     resetObject(getIndexObjectSelected(document.getElementById('objectlist').value));
-
-    // menghapus shading dan mengubah value pada checkbox
-    let shadingCheckbox = document.getElementById("switch-shader");
-    shadingCheckbox.checked = false;
-    shadingOn = false;
 }
 
 function resetCamera() {
@@ -361,7 +356,7 @@ function resetCamera() {
 // Function to redraw scene
 function redrawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // hapus tampilan layar
-    
+
     // redraw the scene
     for (var i = 0; i < objects.length; i++) {
         draw(
